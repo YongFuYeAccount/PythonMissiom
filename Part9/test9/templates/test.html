@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<!-- 1. 导入css -->
+		<link href="https://cdn.bootcss.com/element-ui/2.8.2/theme-chalk/index.css" rel="stylesheet">
+		<!-- 2. 引入vue和vue-router-->
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+		<!-- 未使用vue路由功能可不导入 -->
+		<script src="https://cdn.bootcss.com/vue-router/3.0.6/vue-router.js"></script>
+		<!-- 3. 引入ElementUI组件 -->
+		<script src="https://cdn.bootcss.com/element-ui/2.8.2/index.js"></script>
+		<!-- 4. 引入图标 -->
+		<link rel ="shortcut icon" type="image/x-icon" href="/static/image/labelimgweb/1111.jpg">
+	</head>
+	<body style="height:100%;">
+    <div id="app" style="height:98%;">
+		<el-container style="height:100%;width:100%; border: 1px solid #ee0d2e">
+		  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+		    <el-menu :default-openeds="['1', '3']">
+		      <el-submenu index="1">
+		        <template slot="title"><i class="el-icon-picture"></i>图片查看</template>
+		        <el-menu-item-group>
+		          <el-menu-item index="1-1">查看图像列表</el-menu-item>
+		          <el-menu-item index="1-2">查看图像注释</el-menu-item>
+		        </el-menu-item-group>
+		      </el-submenu>
+		      <el-submenu index="2">
+		        <template slot="title"><i class="el-icon-user"></i>人员管理</template>
+		        <el-menu-item-group>
+		          <template slot="title">分组一</template>
+		          <el-menu-item index="2-1">选项1</el-menu-item>
+		          <el-menu-item index="2-2">选项2</el-menu-item>
+		        </el-menu-item-group>
+		        <el-menu-item-group title="分组2">
+		          <el-menu-item index="2-3">选项3</el-menu-item>
+		        </el-menu-item-group>
+		        <el-submenu index="2-4">
+		          <template slot="title">选项4</template>
+		          <el-menu-item index="2-4-1">选项4-1</el-menu-item>
+		        </el-submenu>
+		      </el-submenu>
+		      <el-submenu index="3">
+		        <template slot="title"><i class="el-icon-setting"></i>图片分配</template>
+		        <el-menu-item-group>
+		          <template slot="title">分组一</template>
+		          <el-menu-item index="3-1">选项1</el-menu-item>
+		          <el-menu-item index="3-2">选项2</el-menu-item>
+		        </el-menu-item-group>
+		        <el-menu-item-group title="分组2">
+		          <el-menu-item index="3-3">选项3</el-menu-item>
+		        </el-menu-item-group>
+		        <el-submenu index="3-4">
+		          <template slot="title">选项4</template>
+		          <el-menu-item index="3-4-1">选项4-1</el-menu-item>
+		        </el-submenu>
+		      </el-submenu>
+		    </el-menu>
+		  </el-aside>
+		  
+		  <el-container style="border:1px solid #0eee89; height:100%;width:100%;">
+		    <el-header style="width:100%;">
+		      <el-menu class="el-menu-demo" mode="horizontal" style="margin: 0 -20px; ">
+		        <el-submenu index="1" style="margin: 0 90%;">
+		          <template slot="title">李二狗</template>
+		          <el-menu-item index="1-1"><i class="el-icon-switch-button"></i><a href="/upload_site" style="text-decoration:none;margin:0px 0px;color:#333;white-space:nowrap;">登出</a></el-menu-item>
+		        </el-submenu>
+		      </el-menu>
+		      
+		    </el-header>
+		    
+		    <el-main style="height:100%; border:1px solid #5d53ee;overflow:hidden">
+			  <div style="width:70%;height:100%;overflow:scroll;border:2px solid #DCDFE6">
+				  <canvas id="canvas1" style="width:1920px;height:1080px;"></canvas>
+			  </div>
+			  <div style="border:2px solid #DCDFE6;width:30%;height:50%;margin:-50% 71% ;">
+				
+			  </div>
+			  <div style="border:2px solid #DCDFE6;width:30%;height:50%;margin:50% 71% ;">
+				<template>
+				    <el-table :data="tableData" style="width: 100%">
+				      <el-table-column prop="date" label="图片名" width="180"></el-table-column>
+				      <el-table-column prop="name" label="标否" width="180"></el-table-column>
+				    </el-table>
+				</template>
+			  </div>
+
+		    </el-main>
+		  </el-container>
+		</el-container>
+    </div>
+	</body>
+	<script>
+		var a = new Vue({
+			el: '#app',
+			data:{
+				uid:'',
+				
+				
+			},
+			methods: {
+				gologin:function(){
+				          //提交表单跳转到登陆页面
+				          document.gologin.submit();
+				        }
+		      }
+		    
+		})
+		var canvas1 = document.getElementById("canvas1")
+		var ctx = canvas1.getContext('2d')
+		var img = new Image()
+		img.src = '/static/image/8.jpg'
+		img.onload = function() {
+			canvas1.style.backgroundImage="url("+img.src+")";
+			
+		}
+		
+	</script>
+	
+	<style>
+	  .el-header {
+	    background-color: #B3C0D1;
+	    color: #333;
+	    line-height: 60px;
+	  }
+	  
+	  .el-aside {
+	    color: #333;
+	  }
+	</style>
+
+</html>
+

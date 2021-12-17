@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>success</title>
+    <!-- 网页名称 -->
+    
+</head>
+<body>
+    <h1 align="center"  style="font-family:arial; color:yellow;font-size 100px;">success</h1> 
+    
+    <!-- 在h1 后面加入这行 style="color: #2ecc71"就可以显示success的颜色,align="center"   -->
+    <body style="background-image:url(/static/image/labelimgweb/2222.jpg); background-size:100% 100%;overflow:hidden">
+{#    <body background="./10.jpg">#}
+      <!-- 用于设置背景的图片 -->
+<hr style=" height:10px;border:none;border-top:10px groove skyblue;">
+<!-- 设置分割线的样式：style=" height:5px;border:none;border-top:5px ridge green;"  -->
+    <form action="/task9/showlist/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input  style="font-size: 40pt; color: greenyellow" size="8"  type="submit" value="查看列表">
+        <!-- 设置input的框高style="width:111px;height:111px" -->
+    </form>
+    <form action="/task9/submit/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input   style="font-size: 40pt; color: greenyellow" size="8" type="submit" value="继续上传">
+    </form>
+  
+    
+</body>
+
+</html>

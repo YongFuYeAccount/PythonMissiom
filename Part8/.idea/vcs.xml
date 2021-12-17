@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/canvas_demo/test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/canvas_demo/yyf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/fronted/yyf-web" vcs="Git" />
+  </component>
+</project>

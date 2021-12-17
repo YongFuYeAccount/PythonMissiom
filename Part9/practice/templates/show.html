@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>展示图片</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <canvas id="canvas1" width="900" height="900"></canvas>
+
+    <br>
+    {% for label in labellist %}
+
+        {{label.x1}}
+        {{label.y1}}
+        {{label.x2}}
+        {{label.y2}}
+        {{label.label}}
+        {{label.user}}
+        {{label.warn}}
+    <form action="/upload_site/showimage/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="imageName" value="{{label.imagename}}" style = "display:none">
+        <input type="text" name="x1" value="{{label.x1}}" style = "display:none">
+        <input type="text" name="y1" value="{{label.y1}}" style = "display:none">
+        <input type="text" name="x2" value="{{label.x2}}" style = "display:none">
+        <input type="text" name="y2" value="{{label.y2}}" style = "display:none">
+        <input type="text" name="Label" value="{{label.label}}" style = "display:none">
+        <input type="submit" value="查看bbox">
+    </form>
+    <form action="/upload_site/reviselabel/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="text" name="imageName" value="{{label.imagename}}" style = "display:none">
+        <input type="text" name="x1" value="{{label.x1}}" style = "display:none">
+        <input type="text" name="y1" value="{{label.y1}}" style = "display:none">
+        <input type="text" name="x2" value="{{label.x2}}" style = "display:none">
+        <input type="text" name="y2" value="{{label.y2}}" style = "display:none">
+        <input type="text" name="Label" value="{{label.label}}" style = "display:none">
+        <input type="submit" value="修改标注">
+    </form>
+    <form action="/upload_site/deletelabel/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="submit" value="删除标注">
+    </form>
+    {% if authority == 'manager'%}
+    <form action="/upload_site/warn/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="text" name="warn" value='警告' style = "display:none">
+        <input type="submit" value="警告">
+    </form>
+    <form action="/upload_site/warn/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="text" name="warn" value='解除警告' style = "display:none">
+        <input type="submit" value="解除警告">
+    </form>
+    {% elif authority == 'checker'%}
+    <form action="/upload_site/warn/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="text" name="warn" value='警告' style = "display:none">
+        <input type="submit" value="警告">
+    </form>
+    <form action="/upload_site/warn/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="label_id" value="{{label.id}}" style = "display:none">
+        <input type="text" name="warn" value='解除警告' style = "display:none">
+        <input type="submit" value="解除警告">
+    </form>
+    {% endif %}
+
+        <br>
+    <script>
+
+        var w = {{x2}}-{{x1}}
+        var h = {{y2}}-{{y1}}
+		var canvas1 = document.getElementById("canvas1")
+		var ctx = canvas1.getContext('2d')
+		var img = new Image()
+		img.src = '/static/image/{{imageName}}'
+
+		function draw() {
+			ctx.drawImage(img,0,0,900,900)
+		    ctx.strokeStyle = 'blue'
+		    ctx.strokeRect({{x1}},{{y1}},w,h)
+		    ctx.font = '25px 黑体';
+            ctx.fillText('{{Label}}',{{x1}},{{y1}})
+		}
+         img.onload = function(){
+            draw()
+		    }
+    </script>
+      {% endfor %}
+
+
+
+
+    <form action="/upload_site/labelimage/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="text" name="imageName" value="{{imageName}}">
+        <input type="submit" value="进行标注">
+    </form>
+
+    <form action="/upload_site/showlist/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+
+        <input type="submit" value="返回列表">
+    </form>
+
+{{message}}
+
+</body>
+</html>

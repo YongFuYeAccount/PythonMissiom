@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理人员</title>
+</head>
+<body>
+
+    <h2>注册新用户</h2>
+    <form action="/upload_site/savemanageusers/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <h3>账号</h3>
+        <input type="text" name="newuser">
+        <h3>密码</h3>
+        <input type="text" name="newpwd">
+        <h3>用户权限</h3>
+        <input type="text" name="newauthority">
+        <input type="submit" value="注册">
+    </form>
+
+
+
+    <h2>更改用户信息</h2>
+    <h4>账号----------------------密码---------------------用户权限</h4>
+
+    <form action="/upload_site/savemanageusers/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        {% for user in users %}
+        <input type="text" name="newuser" value="{{user.user}}" readonly="readonly">
+        <input type="text" name="newpwd" value="{{user.pwd}}" >
+        <input type="text" name="newauthority" value="{{user.authority}}">
+        <input type="submit" value="保存">
+        <br>
+        {% endfor %}
+    </form>
+
+
+
+    <form action="/upload_site/showlist/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="submit" value="查看列表">
+    </form>
+</body>
+</html>

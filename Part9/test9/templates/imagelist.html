@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片列表</title>
+</head>
+<body>
+<body style="background-image:url(/static/image/labelimgweb/1111.jpg); background-size:150% 150%>
+{#  <body background="./0003.jpg"></body>#}
+<h2 style="color:blue; font-size:20px">用户权限：{{authority}}</h2>
+    <form action="/task9/" method="get" enctype="multipart/form-data">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="登出">
+        <!-- style="font-size: 20pt; color: yellowgreen"设置字体的样式 -->
+    </form>
+<h2 style="color:orange ; font-size:20px">图像列表如下----是否标注</h2>
+        {% for image in imagelist %}
+        <form action="/task9/showimage/" method="get" enctype="multipart/form-data">
+            <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+            <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+            <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+            <input type="text" name="imageName" value="{{image.imagename}}" readonly="readonly">
+            <input type="text" name="imagelabel" value="{{image.labelnote}}" readonly="readonly">
+            <input type="text" name="x1" value="0" style = "display:none">
+            <input type="text" name="y1" value="0" style = "display:none">
+            <input type="text" name="x2" value="0" style = "display:none">
+            <input type="text" name="y2" value="0" style = "display:none">
+            <input type="text" name="Label" value="" style = "display:none">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="查看">
+        </form>
+
+        {% endfor %}
+    <form action="/task9/submit/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="继续上传">
+    </form>
+
+	{% if authority == 'manager'%}
+    <form action="/task9/distribute/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="分配图片">
+    </form>
+    <form action="/task9/manageusers/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="管理用户">
+    </form>
+    {% elif authority == 'checker'%}
+    <form action="/task9/distribute/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input style="font-size: 20pt; color: yellowgreen" type="submit" value="分配图片">
+    </form>
+    {% endif %}
+
+
+
+</body>
+</html>

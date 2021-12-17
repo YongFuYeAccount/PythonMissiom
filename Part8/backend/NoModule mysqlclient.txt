@@ -1,0 +1,5 @@
+
+在项目同名的模块下的__init__.py文件中加入以下代码：
+
+import pymysql
+pymysql.install_as_MySQLdb()

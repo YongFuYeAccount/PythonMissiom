@@ -1,0 +1,123 @@
+<template>
+  <div id="nav">
+    <div>引入内容</div>
+    <!--<div>{{xinwenList}}</div> -->
+    <div v-for="items in xinwenList" :key="items.id">
+      <div class="biaoti">
+        <div>
+          <img class="app-img-style" :src="items.img_url" alt="">
+        </div>
+        <div class="xinwen-title">{{items.biaoti}}</div>
+        <div class="zuozhe">{{items.zuozhe}}</div>
+        </div> 
+        
+        <div class="neirong">
+           {{items.neirong}}
+        </div>
+        <div class="shijian">
+          {{items.add_time}}
+        </div>
+      </div>
+      <router-view></router-view>
+    </div> 
+  </template>
+<script>
+import axios from 'axios'
+//import { defineComponent } from '@vue/composition-api'
+
+export default {
+  data() {
+    return{
+      xinwenList:[]
+    } 
+  },
+  created(){
+    this.getData()
+  },
+  methods:{
+    getData(){
+      axios.get('http://127.0.0.1:8000/xinwen/').then((response)=>{
+        this.xinwenList = response.data
+        console.log('我是数据',this.xinwenList)
+      }) 
+    }
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #076ace;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #09529b;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+.biaoti{
+  color: #42b983;
+  font-size: 18px;
+  text-align: left;
+  height: 128px;
+  border: #42b983;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 12px;
+  padding: 8px;
+}
+.app-img-style{
+  width: 128px;
+  height: 128px;
+}
+.zuozhe{
+  color: #42b983;
+  font-size: 10px;
+  text-align: left;
+  height: 38px;
+  position:relative;
+  left: 500px;
+  right: 10px;
+  top: -140px;
+  
+}
+.neirong{
+  color: #42b983;
+  font-size: 12px;
+  text-align: left;
+  height: 28px;
+  position:relative;
+  left: 500px;
+  right: 10px;
+  top: -100px;
+}
+.shijian{
+  color: #42b983;
+  font-size: 18px;
+  text-align: left;
+  height: 38px;
+  position:relative;
+  left: 500px;
+  right: 10px;
+  top: 160px;
+}
+.xinwen-title{
+  position:relative;
+  left: 500px;
+  right: 10px;
+  top: -140px;
+ 
+
+}
+</style>

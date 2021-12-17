@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+	<div id="app">
+
+		<canvas id="canvas1" width="900" height="900" @mousemove="mousexy" @mousedown='down' @mouseup="up" ></canvas>
+		<button @click="clear">清除</button>
+		<form action="/upload_site/savelabel/" method="post" enctype="multipart/form-data">
+			<input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+      	  	<input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        	<input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+		    {% csrf_token %}
+		    <h2>图片名称</h2>
+		    <input type="text" v-model="imagename" name="imagename" readonly="readonly">
+		    <br>
+		    <h2>bbox坐标</h2>
+
+		    <h2>x1---------------y1---------------x2--------------y2</h2>
+		    <input type="text" v-model="x1" name="x1">
+		    <input type="text" v-model="y1" name="y1">
+		    <input type="text" v-model="x2" name="x2">
+		    <input type="text" v-model="y2" name="y2">
+
+		    <br>
+		    <h2>注释为</h2>
+			<input type="text" name="label" v-model="labelmessage" @keyup.enter="label">
+			<input type="text" name="label_id" value="{{label_id}}" readonly="readonly" style = "display:none">
+			<input type="text" name="labelnote" value='是' readonly="readonly" style = "display:none">
+		    <input type="submit" value="保存">
+
+
+		</form>
+
+	</div>
+
+	<script>
+		var app = new Vue({
+			el:"#app",
+			data:{
+				imagename:'{{imagename}}',
+				x1:{{x1}},
+				y1:{{y1}},
+				x2:{{x2}},
+				y2:{{y2}},
+				depositx:0,
+				deposity:0,
+				width:0,
+				height:0,
+				flag:0,//0为不在框内，1为在框内，2为右拉，3为左拉，4为上拉，5为下拉,6为右上，7为左上，8为右下，9为左下
+				depositflag:0,
+				mouse:0, // 0为没按下，1为按下
+				mousex:0,
+				mousey:0,
+				dmousex:0,
+				dmousey:0,
+				dx:0,
+				dy:0,
+				labelmessage:'{{label}}',
+				blur:20,
+			},
+			methods:{
+				mousexy:function(event){
+					this.mousex=event.offsetX;
+					this.mousey=event.offsetY;
+
+					if(((this.x1+this.blur) < this.mousex && this.mousex < (this.x2-this.blur)) && ((this.y1+this.blur) < this.mousey && this.mousey < (this.y2-this.blur))){
+						canvas1.style.cursor="move";
+						this.flag=1
+					}
+					else if(((this.x2-this.blur) < this.mousex && this.mousex < (this.x2+this.blur)) && ((this.y1+this.blur) < this.mousey && this.mousey < (this.y2-this.blur))){
+						canvas1.style.cursor="e-resize";
+						this.flag=2
+					}
+
+					else if(((this.x1-this.blur) < this.mousex && this.mousex < (this.x1+this.blur)) && ((this.y1+this.blur) < this.mousey && this.mousey < (this.y2-this.blur))){
+						canvas1.style.cursor="w-resize";
+						this.flag=3
+					}
+					else if(((this.y1-this.blur) < this.mousey && this.mousey < (this.y1+this.blur)) && ((this.x1+this.blur) < this.mousex && this.mousex < (this.x2-this.blur))){
+						canvas1.style.cursor="n-resize";
+						this.flag=4
+					}
+
+					else if(((this.y2-this.blur) < this.mousey && this.mousey < (this.y2+this.blur)) && ((this.x1+this.blur) < this.mousex && this.mousex < (this.x2-this.blur))){
+						canvas1.style.cursor="s-resize";
+						this.flag=5
+					}
+					else if(((this.x2-this.blur) < this.mousex && this.mousex < (this.x2+this.blur)) &&((this.y1-this.blur) < this.mousey && this.mousey < (this.y1+this.blur))){
+						canvas1.style.cursor=" ne-resize";
+						this.flag=6
+					}
+					else if(((this.x1-this.blur) < this.mousex && this.mousex < (this.x1+this.blur)) &&((this.y1-this.blur) < this.mousey && this.mousey < (this.y1+this.blur))){
+						canvas1.style.cursor=" nw-resize"
+						this.flag=7
+					}
+					else if(((this.x2-this.blur) < this.mousex && this.mousex < (this.x2+this.blur)) &&((this.y2-this.blur) < this.mousey && this.mousey < (this.y2+this.blur))){
+						canvas1.style.cursor=" se-resize"
+						this.flag=8
+					}
+					else if(((this.x1-this.blur) < this.mousex && this.mousex < (this.x1+this.blur)) &&((this.y2-this.blur) < this.mousey && this.mousey < (this.y2+this.blur))){
+						canvas1.style.cursor=" sw-resize"
+						this.flag=9
+					}
+					else{
+						canvas1.style.cursor="default";
+						this.flag=0
+					}
+					//拖拽
+					if (this.mouse==1 && this.depositflag==1){
+						this.dx = (this.mousex - this.dmousex)
+						this.dy = (this.mousey - this.dmousey)
+						this.x1 = (this.x1+this.dx)
+						this.x2 = (this.x2+this.dx)
+						this.y1 = (this.y1+this.dy)
+						this.y2 = (this.y2+this.dy)
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+						this.dx = 0
+						this.dy = 0
+					}
+					//右拽
+					if (this.mouse==1 && this.depositflag==2){
+						this.dx = (this.mousex - this.dmousex)
+						this.x2 = (this.x2+this.dx)
+						this.dmousex = this.mousex;
+						this.dx = 0
+					}
+					//左拽
+					if (this.mouse==1 && this.depositflag==3){
+						this.dx = (this.mousex - this.dmousex)
+						this.x1 = (this.x1+this.dx)
+						this.dmousex = this.mousex;
+						this.dx = 0
+					}
+					//上拽
+					if (this.mouse==1 && this.depositflag==4){
+						this.dy= (this.mousey - this.dmousey)
+						this.y1 = (this.y1+this.dy)
+						this.dmousey = this.mousey;
+						this.dy = 0
+					}
+					//下拽
+					if (this.mouse==1 && this.depositflag==5){
+						this.dy= (this.mousey - this.dmousey)
+						this.y2 = (this.y2+this.dy)
+						this.dmousey = this.mousey;
+						this.dy = 0
+					}
+					//右上拽
+					if (this.mouse==1 && this.depositflag==6){
+						this.dx = (this.mousex - this.dmousex)
+						this.dy = (this.mousey - this.dmousey)
+						this.x2 = (this.x2+this.dx)
+						this.y1 = (this.y1+this.dy)
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+						this.dx = 0
+						this.dy = 0
+					}
+					//左上拽
+					if (this.mouse==1 && this.depositflag==7){
+						this.dx = (this.mousex - this.dmousex)
+						this.dy = (this.mousey - this.dmousey)
+						this.x1 = (this.x1+this.dx)
+						this.y1 = (this.y1+this.dy)
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+						this.dx = 0
+						this.dy = 0
+					}
+					//右下拽
+					if (this.mouse==1 && this.depositflag==8){
+						this.dx = (this.mousex - this.dmousex)
+						this.dy = (this.mousey - this.dmousey)
+						this.x2 = (this.x2+this.dx)
+						this.y2 = (this.y2+this.dy)
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+						this.dx = 0
+						this.dy = 0
+					}
+					//左下拽
+					if (this.mouse==1 && this.depositflag==9){
+						this.dx = (this.mousex - this.dmousex)
+						this.dy = (this.mousey - this.dmousey)
+						this.x1 = (this.x1+this.dx)
+						this.y2 = (this.y2+this.dy)
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+						this.dx = 0
+						this.dy = 0
+					}
+
+						ctx.clearRect(0,0,900,900);
+						ctx.strokeStyle = 'blue'
+						ctx.strokeRect(this.x1,this.y1,(this.x2-this.x1),(this.y2-this.y1))
+						ctx.font = '25px 黑体';
+						ctx.fillText(this.labelmessage,this.x1,this.y1)
+
+
+				},
+
+				down:function(event){
+					this.mouse = 1;
+					this.depositflag = this.flag
+					if(this.flag==0){
+						this.x1 = this.mousex;
+						this.y1 = this.mousey;
+					}
+
+					else{
+						this.dmousex = this.mousex;
+						this.dmousey = this.mousey;
+					}
+
+
+
+				},
+				up:function(event){
+					this.mouse = 0;
+				    if(this.depositflag==0){
+				    	this.x2=this.mousex;
+				    	this.y2=this.mousey;
+				    }
+					if (this.x2 < this.x1){
+						this.depositx = this.x1;
+						this.x1 = this.x2;
+						this.x2 = this.depositx;
+						this.depositx=0
+					}
+					if (this.y2 < this.y1){
+						this.deposity = this.y1;
+						this.y1 = this.y2;
+						this.y2 = this.deposity;
+						this.deposity=0
+					}
+					if(this.depositflag==0){
+						ctx.strokeStyle = 'blue'
+						ctx.strokeRect(this.x1,this.y1,(this.x2-this.x1),(this.y2-this.y1))
+						ctx.font = '25px 黑体';
+						ctx.fillText(this.labelmessage,this.x1,this.y1)
+					}
+				},
+
+				box:function(){
+					ctx.strokeStyle = 'blue'
+					ctx.strokeRect(this.x1,this.y1,(this.x2-this.x1),(this.y2-this.y1))
+					},
+				label:function(){
+					ctx.font = '25px 黑体';
+					ctx.fillText(this.labelmessage,this.x1,this.y1)
+				},
+
+
+				clear:function(){
+					this.x1 = 0;
+					this.y1 = 0;
+					this.x2 = 0;
+					this.y2 = 0;
+					ctx.clearRect(0,0,900,900);
+				},
+					}
+
+		})
+
+		var canvas1 = document.getElementById("canvas1")
+		var ctx = canvas1.getContext('2d')
+		var img = new Image()
+		img.src = '/static/image/{{imagename}}'
+		img.onload = function() {
+			canvas1.style.backgroundImage="url("+img.src+")";
+			canvas1.style.backgroundSize=`${canvas1.width}px ${canvas1.height}px`
+		}
+
+
+
+
+	</script>
+</body>
+</html>

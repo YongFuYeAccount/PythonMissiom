@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传图片</title>
+
+</head>
+
+    <style>
+    body{
+        margin:0;
+    }
+    .box{
+        width:960px;
+        margin:0 auto;
+        position:relative;
+    }
+    .box .left{
+        width:200px;
+        height:400px;
+        background-color:#0f0;
+        position:absolute;
+    }
+    .box .center{
+        height:400px;
+        background-color:#00f;
+        margin:0 300px 0 200px;
+    }
+    .box .right{
+        width:300px;
+        height:400px;
+        background-color:#f00;
+        position:absolute;
+        right:0;
+        top:0;
+    }
+    </style>
+
+<body>
+
+    <h1>请上传图片</h1>
+    <form action="/upload_site/receive/" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="file" name="upload_file" accept="image/*" multiple>
+        <input type="submit" value="上传">
+    </form>
+
+    <form action="/upload_site/showlist/" method="get" enctype="multipart/form-data">
+        <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+        <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+        <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+        <input type="submit" value="查看列表">
+    </form>
+
+
+
+</form>
+</body>
+</html>

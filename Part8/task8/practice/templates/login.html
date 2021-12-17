@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+{#<body background="./3.jpg"></body>#}
+<body style="background-image:url(/static/image/labelimgweb/16.png); background-size:200% 200%;overflow:hidden">
+<div id="app">
+	<form action="/upload_site/showlist/" method="get" enctype="multipart/form-data">
+		<h2 v-text="user"></h2>
+        <input style="font-size: 40pt; color: darkred" size="8" type="text" name="user" >
+		<br>
+		<h2 v-text="pwd"></h2>
+		<input style="font-size: 40pt; color: darkred" size="8" type="text" name="pwd" >
+		<input style="font-size: 40pt; color: darkred" size="8" type="submit" value="登录">
+	</form>
+</div>
+<script>
+	var app = new Vue({
+		el:"#app",
+		data:{
+			user:"账号",
+			pwd:"密码"
+		},
+		methods:{
+			
+		}
+	})
+
+</script>
+</body>
+</html>

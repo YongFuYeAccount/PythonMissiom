@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分配图片</title>
+</head>
+<body>
+  <form action="/upload_site/savedistribute/" method="get" enctype="multipart/form-data">
+    <input type="text" name="user" value="{{user}}" readonly="readonly" style="display:none">
+    <input type="text" name="authority" value="{{authority}}" readonly="readonly" style = "display:none">
+    <input type="text" name="pwd" value="{{pwd}}" readonly="readonly" style = "display:none">
+    <h2>用户</h2>
+    {% for user in users %}
+    <h2>{{user.user}}</h2>
+    <input type="checkbox" name="{{user.user}}" value="{{user.user}}">
+    {% endfor %}
+    <br>
+    <h2>图片</h2>
+    {% for image in imagelist %}
+    <h5>{{image.imagename}}</h5>
+    <img src="/static/image/{{image.imagename}}" width="100" height="100">
+    <input type="checkbox" name="{{image.imagename}}" value="{{image.imagename}}">
+    {% endfor %}
+
+    <input type="submit" value="确定">
+  </form>
+</body>
+</html>
